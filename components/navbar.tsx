@@ -94,7 +94,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Nav Button */}
-          <div className="md:hidden flex justify-center items-center">
+          <div className="md:hidden flex h-full justify-center items-center">
             <Sheet>
               <SheetTrigger asChild>
                 <Button
@@ -143,7 +143,16 @@ export default function Navbar() {
                   </div>
                 </div>
                 <SheetFooter>
-                  <Button variant={"outline"} onClick={() => {}}>
+                  <Button
+                    variant={"outline"}
+                    onClick={() => {
+                      setTimeout(() => {
+                        toast.info("Signing out... Please wait");
+                        redirect("/authentication");
+                      }, 2000);
+                      client.auth.signOut();
+                    }}
+                  >
                     Logout
                   </Button>
                 </SheetFooter>
