@@ -425,7 +425,7 @@ export default function Shop() {
           Sorry, it seems like you're not logged in. Please login using the link
           below.
         </Label>
-        <Link href="/login">
+        <Link href="/authentication">
           <Button variant="default">Log in</Button>
         </Link>
       </div>
