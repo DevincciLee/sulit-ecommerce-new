@@ -93,7 +93,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
               <Input
                 id="confirm-password"
                 type="password"
-                name="password"
+                name="confirmPassword"
                 required
               />
               <FieldDescription>Please confirm your password.</FieldDescription>

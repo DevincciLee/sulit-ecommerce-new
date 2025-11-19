@@ -10,10 +10,10 @@ const Auth = () => {
           <TabsTrigger value="login">Login</TabsTrigger>
           <TabsTrigger value="signup">Signup</TabsTrigger>
         </TabsList>
-        <TabsContent value="login">
+        <TabsContent value="login" className="mx-auto container max-w-[400px]">
           <LoginForm></LoginForm>
         </TabsContent>
-        <TabsContent value="signup">
+        <TabsContent value="signup" className="mx-auto container max-w-[400px]">
           <SignupForm></SignupForm>
         </TabsContent>
       </Tabs>
