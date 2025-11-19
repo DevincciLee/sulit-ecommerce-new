@@ -24,11 +24,12 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
+    const fullName = formData.get("fullName") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
 
-    if (!email || !password || !confirmPassword) {
+    if (!fullName || !email || !password || !confirmPassword) {
       toast.error("Please fill in all fields.");
       return;
     }
@@ -41,6 +42,11 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
     const { data, error } = await client.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          full_name: fullName,
+        },
+      },
     });
 
     if (data) {
@@ -54,6 +60,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       toast.error("Unable to sign up, please try again.");
     }
   };
+
   return (
     <Card {...props}>
       <CardHeader>
@@ -65,6 +72,20 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       <CardContent>
         <form onSubmit={handleSignUp}>
           <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor="fullName">Full Name</FieldLabel>
+              <Input
+                id="fullName"
+                type="text"
+                name="fullName"
+                placeholder="John Doe..."
+                required
+              />
+              <FieldDescription>
+                We&apos;ll use this to contact you. We will not share your email
+                with anyone else.
+              </FieldDescription>
+            </Field>
             <Field>
               <FieldLabel htmlFor="email">Email</FieldLabel>
               <Input
