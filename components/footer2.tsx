@@ -1,4 +1,7 @@
-import { Logo, LogoImage, LogoText } from "@/components/shadcnblocks/logo";
+import Link from "next/link";
+import logo from "@/public/logo.png";
+import { Label } from "./ui/label";
+import Image from "next/image";
 
 interface MenuItem {
   title: string;
@@ -9,12 +12,6 @@ interface MenuItem {
 }
 
 interface Footer2Props {
-  logo?: {
-    url: string;
-    src: string;
-    alt: string;
-    title: string;
-  };
   tagline?: string;
   menuItems?: MenuItem[];
   copyright?: string;
@@ -25,12 +22,6 @@ interface Footer2Props {
 }
 
 const Footer2 = ({
-  logo = {
-    src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/block-1.svg",
-    alt: "blocks for shadcn/ui",
-    title: "SULIT-TECH",
-    url: "https://www.shadcnblocks.com",
-  },
   tagline = "Your one stop shop for computer and printer needs.",
   menuItems = [
     {
@@ -81,15 +72,15 @@ const Footer2 = ({
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
             <div className="col-span-2 mb-8 lg:mb-0">
               <div className="flex items-center gap-2 lg:justify-start">
-                <Logo url="/">
-                  <LogoImage
-                    src={logo.src}
-                    alt={logo.alt}
-                    title={logo.title}
-                    className="h-10 dark:invert"
-                  />
-                  <LogoText className="text-xl">{logo.title}</LogoText>
-                </Logo>
+                <Link
+                  href="/"
+                  className="cursor-pointer flex flex-row gap-2 items-center justify-center"
+                >
+                  <Image src={logo} alt="logo" className="w-10" />
+                  <Label className="text-xl cursor-pointer font-bold">
+                    SULIT-TECH
+                  </Label>
+                </Link>
               </div>
               <p className="mt-4 font-bold">{tagline}</p>
             </div>
