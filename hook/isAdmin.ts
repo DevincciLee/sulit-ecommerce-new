@@ -22,7 +22,7 @@ export function useAdmin() {
 
       const { data: adminData, error: adminError } = await supabase
         .from("profiles")
-        .select("isAdmin")
+        .select("isadmin")
         .eq("id", id)
         .single();
 
@@ -30,7 +30,7 @@ export function useAdmin() {
         console.error("Error fetching admin creds", adminError);
       }
 
-      setAdminCreds(adminData?.isAdmin ?? false);
+      setAdminCreds(adminData?.isadmin ?? false);
     }
 
     getAdmin();

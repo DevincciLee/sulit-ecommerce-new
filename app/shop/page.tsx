@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import useAuth from "@/hook/useAuth";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Pagination,
   PaginationContent,
@@ -14,16 +14,55 @@ import {
   PaginationNext,
 } from "@/components/ui/pagination";
 import { useSearch } from "@/components/context/searchContext";
-import { products } from "../data/products";
+import { createClient } from "@/utils/supabase/client";
+
+type Product = {
+  id: string;
+  name: string;
+  imageUrl: string;
+  slug: string;
+  price: number;
+  originalPrice: number;
+  badge: string;
+};
 
 export default function Shop() {
   const { user } = useAuth();
+  const supabase = createClient();
+
+  const [products, setProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
 
   const { query = "" } = useSearch();
 
-  // ✅ If query is empty, show all products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data, error } = await supabase.from("products").select(`
+          *
+        `);
+
+      if (error) {
+        console.error("Error fetching products:", error);
+        return;
+      }
+
+      const mapped = data.map((p) => ({
+        id: p.id,
+        name: p.name,
+        imageUrl: p.image,
+        slug: p.slug,
+        price: p.price,
+        originalPrice: p.original_price,
+        badge: p.badge,
+      }));
+
+      setProducts(mapped);
+    };
+
+    fetchProducts();
+  }, [supabase]);
+
   const filtered =
     query.trim() === ""
       ? products

@@ -9,7 +9,6 @@ import { redirect, useRouter } from "next/navigation";
 export default function AdminPage() {
   const { adminCreds } = useAdmin();
   const router = useRouter();
-  console.log(adminCreds);
   if (!adminCreds) {
     return (
       <div className="container mt-2 mx-auto flex flex-col justify-center items-center gap-4">

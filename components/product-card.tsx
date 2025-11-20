@@ -1,80 +1,54 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+"use client";
+import { useEffect, useState } from "react";
 import ProductCard from "./card";
-
-const products = [
-  {
-    id: "1",
-    title: "Wireless Headphones",
-    description: "Premium noise-cancelling experience",
-    price: 349.0,
-    originalPrice: 399.0,
-    rating: 5,
-    reviews: 121,
-    image: "https://ui.shadcn.com/placeholder.svg",
-    badge: "Hot",
-  },
-  {
-    id: "2",
-    title: "Smart Watch",
-    description: "Health and fitness companion",
-    price: 399.0,
-    originalPrice: 449.0,
-    rating: 5,
-    reviews: 156,
-    image: "https://ui.shadcn.com/placeholder.svg",
-    badge: "New",
-  },
-  {
-    id: "3",
-    title: "Laptop Pro",
-    description: "Power and performance redefined",
-    price: 1299.0,
-    originalPrice: 1499.0,
-    rating: 5,
-    reviews: 89,
-    image: "https://ui.shadcn.com/placeholder.svg",
-    badge: "Featured",
-  },
-  {
-    id: "4",
-    title: "RGB Keyboard",
-    description: "Mechanical RGB backlit keyboard",
-    price: 159.0,
-    originalPrice: 199.0,
-    rating: 5,
-    reviews: 92,
-    image: "https://ui.shadcn.com/placeholder.svg",
-    badge: "Featured",
-  },
-  {
-    id: "5",
-    title: "Gaming Monitor",
-    description: "144Hz refresh rate display",
-    price: 699.0,
-    originalPrice: 799.0,
-    rating: 5,
-    reviews: 78,
-    image: "https://ui.shadcn.com/placeholder.svg",
-    badge: "New",
-  },
-  {
-    id: "6",
-    title: "Smartphone Pro",
-    description: "Pro camera system, ProMotion",
-    price: 999.0,
-    originalPrice: 1099.0,
-    rating: 5,
-    reviews: 245,
-    image: "https://ui.shadcn.com/placeholder.svg",
-    badge: "Old",
-  },
-];
+import { createClient } from "@/utils/supabase/client";
 
 const MAX_ITEMS = 6;
 
+type Product = {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  imageUrl: string;
+  price: number;
+  originalPrice: number;
+  badge: string;
+};
+
 const ProductCard1 = () => {
-  const displayedProducts = products.slice(0, MAX_ITEMS);
+  const supabase = createClient();
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("badge", "Featured")
+        .limit(MAX_ITEMS);
+
+      if (error) {
+        console.error("Error fetching products:", error);
+        return;
+      }
+
+      const mapped = data.map((p) => ({
+        id: p.id,
+        name: p.name,
+        description: p.description ?? "",
+        slug: p.slug ?? "",
+        imageUrl: p.image,
+        price: p.price,
+        originalPrice: p.original_price,
+        badge: p.badge,
+      }));
+
+      setProducts(mapped);
+    };
+
+    fetchProducts();
+  }, [supabase]);
 
   return (
     <section className="w-full px-8 py-6">
@@ -83,19 +57,22 @@ const ProductCard1 = () => {
       </h2>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:gap-6 xl:grid-cols-6">
-        {displayedProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            id={product.id}
-            name={product.title}
-            imageUrl={product.image}
-            price={product.price}
-            originalPrice={product.originalPrice}
-            rating={product.rating}
-            ratingCount={product.reviews}
-            badge={product.badge}
-          />
-        ))}
+        {products.length === 0 ? (
+          <p className="text-gray-500">No products found.</p>
+        ) : (
+          products.map((product) => (
+            <ProductCard
+              key={product.id}
+              id={product.id}
+              name={product.name}
+              slug={product.slug}
+              imageUrl={product.imageUrl}
+              price={product.price}
+              originalPrice={product.originalPrice}
+              badge={product.badge}
+            />
+          ))
+        )}
       </div>
     </section>
   );

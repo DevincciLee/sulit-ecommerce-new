@@ -1,44 +1,58 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { ShoppingBag, Star, ArrowRight, Badge } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import ProductCard from "./card";
+import { createClient } from "@/utils/supabase/client";
+import { useEffect, useState } from "react";
 
 const StorefrontHero1 = () => {
-  const featuredProducts = [
-    {
-      id: "prod_001",
-      sku: "WH-XB900N",
-      name: "Wireless Noise-Canceling Headphones",
-      brand: "Sony",
-      price: 199.99,
-      originalPrice: 249.99,
-      rating: 4.8,
-      reviewCount: 1247,
-      inStock: true,
-      isNew: true,
-      isOnSale: false,
-      image: "https://ui.shadcn.com/placeholder.svg",
-      colors: ["#000000", "#1E3A8A", "#991B1B"],
-      badge: "Featured",
-    },
-    {
-      id: "prod_002",
-      sku: "SWP-2024",
-      name: "Smart Watch Pro Series 7",
-      brand: "Apple",
-      price: 279.99,
-      originalPrice: 349.99,
-      rating: 4.9,
-      reviewCount: 892,
-      inStock: true,
-      isNew: false,
-      isOnSale: true,
-      image: "https://ui.shadcn.com/placeholder.svg",
-      colors: ["#1F2937", "#F3F4F6", "#F59E0B"],
-      badge: "Featured",
-    },
-  ];
+  type Product = {
+    id: string;
+    name: string;
+    slug: string;
+    description?: string;
+    imageUrl: string;
+    price: number;
+    originalPrice: number;
+    badge: string;
+  };
+
+  const MAX_ITEMS = 2;
+  const supabase = createClient();
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("badge", "Bestseller")
+        .limit(MAX_ITEMS);
+
+      if (error) {
+        console.error("Error fetching products:", error);
+        return;
+      }
+
+      const mapped = data.map((p) => ({
+        id: p.id,
+        name: p.name,
+        description: p.description ?? "",
+        slug: p.slug,
+        imageUrl: p.image,
+        price: p.price,
+        originalPrice: p.original_price,
+        badge: p.badge,
+      }));
+
+      setProducts(mapped);
+    };
+
+    fetchProducts();
+  }, [supabase]);
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl shadow-md mt-4 md:w-full w-[90vw]">
@@ -73,16 +87,15 @@ const StorefrontHero1 = () => {
         {/* Right Content - Product Showcase */}
         <div className="w-full max-w-2xl lg:mt-0">
           <div className="grid gap-6 sm:grid-cols-2">
-            {featuredProducts.map((product) => (
+            {products.map((product) => (
               <ProductCard
                 key={product.id}
                 id={product.id}
                 name={product.name}
-                imageUrl={product.image}
+                slug={product.slug}
+                imageUrl={product.imageUrl}
                 price={product.price}
                 originalPrice={product.originalPrice}
-                rating={product.rating}
-                ratingCount={product.reviewCount}
                 badge={product.badge}
               ></ProductCard>
             ))}

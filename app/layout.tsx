@@ -8,16 +8,22 @@ import { Toaster } from "sonner";
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/sidebar";
 import { SearchProvider } from "@/components/context/searchContext";
+import { useAdmin } from "@/hook/isAdmin";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { adminCreds } = useAdmin();
   const pathname = usePathname();
-  if (pathname.startsWith("/admin")) {
+  if (pathname.startsWith("/admin") && adminCreds) {
     return (
       <html lang="en">
+        <head>
+          <title>SULIT-TECH</title>
+          <link rel="icon" href="/logo.png" type="image/png" />
+        </head>
         <body className={`antialiased`}>
           <AuthProvider>
             <main className="flex flex-row">
@@ -32,6 +38,10 @@ export default function RootLayout({
   }
   return (
     <html lang="en">
+      <head>
+        <title>SULIT-TECH</title>
+        <link rel="icon" href="/logo.png" type="image/png" />
+      </head>
       <body className={`antialiased`}>
         <AuthProvider>
           <SearchProvider>

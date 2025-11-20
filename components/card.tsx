@@ -6,6 +6,7 @@ import { useState } from "react";
 type ProductCardProps = {
   id: string;
   name: string;
+  slug: string;
   imageUrl: string;
   price: number;
   originalPrice?: number;
@@ -19,11 +20,10 @@ type ProductCardProps = {
 export default function ProductCard({
   id,
   name,
+  slug,
   imageUrl,
   price,
   originalPrice,
-  rating = 0,
-  ratingCount,
   badge,
   onAddToCart,
   onToggleWishlist,
@@ -91,29 +91,6 @@ export default function ProductCard({
           {name}
         </h3>
 
-        {/* Rating */}
-        <div className="mt-2 flex items-center gap-1.5">
-          {Array.from({ length: 5 }).map((_, i) => {
-            const filled = i + 1 <= Math.round(rating);
-            return (
-              <svg
-                key={i}
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                className={filled ? "fill-amber-500" : "fill-gray-200"}
-                aria-hidden="true"
-              >
-                <path d="M12 .587l3.668 7.431L24 9.748l-6 5.853L19.335 24 12 19.897 4.665 24 6 15.601 0 9.748l8.332-1.73z" />
-              </svg>
-            );
-          })}
-          <span className="ml-1 text-xs text-gray-600">
-            {rating.toFixed(1)}
-            {ratingCount ? ` (${ratingCount})` : ""}
-          </span>
-        </div>
-
         {/* Price */}
         <div className="mt-2 flex items-end gap-2">
           <span className="text-base font-bold text-gray-900">
@@ -143,7 +120,7 @@ export default function ProductCard({
             Add to cart
           </button>
           <a
-            href={`/product/${id}`}
+            href={`/product/${slug}`}
             className="flex justify-center items-center rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-800 transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             aria-label={`View details for ${name}`}
           >
