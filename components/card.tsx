@@ -44,10 +44,9 @@ export default function ProductCard({
   };
 
   const badgeColors: Record<string, string> = {
-    New: "bg-orange-600",
-    Featured: "bg-green-600",
-    Hot: "bg-red-800",
-    Old: "bg-green-800",
+    New: "bg-green-400",
+    Featured: "bg-orange-600",
+    Bestseller: "bg-red-800",
   };
 
   return (
