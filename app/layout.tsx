@@ -6,6 +6,8 @@ import Navbar from "@/components/navbar";
 import { Footer2 } from "@/components/footer2";
 import { Toaster } from "sonner";
 import { usePathname } from "next/navigation";
+import Sidebar from "@/components/sidebar";
+import { SearchProvider } from "@/components/context/searchContext";
 
 export default function RootLayout({
   children,
@@ -17,7 +19,12 @@ export default function RootLayout({
     return (
       <html lang="en">
         <body className={`antialiased`}>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <main className="flex flex-row">
+              <Sidebar />
+              {children}
+            </main>
+          </AuthProvider>
           <Toaster />
         </body>
       </html>
@@ -27,9 +34,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`antialiased`}>
         <AuthProvider>
-          <Navbar />
-          {children}
-          <Footer2 />
+          <SearchProvider>
+            <Navbar />
+            {children}
+            <Footer2 />
+          </SearchProvider>
         </AuthProvider>
         <Toaster />
       </body>

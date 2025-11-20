@@ -18,8 +18,11 @@ import useAuth from "@/hook/useAuth";
 import { redirect, useRouter } from "next/navigation";
 import client from "@/api/client";
 import { toast } from "sonner";
+import { useState } from "react";
+import { useSearch } from "./context/searchContext";
 
 export default function Navbar() {
+  const { setQuery } = useSearch();
   const navLinks = [
     {
       id: 1,
@@ -40,6 +43,7 @@ export default function Navbar() {
 
   const { user } = useAuth();
   const router = useRouter();
+  const [showSearch, setShowSearch] = useState(false);
   if (user) {
     return (
       <>
@@ -74,7 +78,13 @@ export default function Navbar() {
           {/* Desktop Login Menu */}
           <div className="hidden md:flex justify-center items-center gap-4 w-[15vw]">
             <div className="flex justify-center items-center gap-2">
-              <Heart className="cursor-pointer"></Heart>
+              <Button
+                variant={"ghost"}
+                className="hover:bg-green-700 text-white hover:text-white cursor-pointer"
+                onClick={() => setShowSearch((prev) => !prev)}
+              >
+                <Search className="size-5.5" />
+              </Button>
               <ShoppingCart className="cursor-pointer"></ShoppingCart>
             </div>
             <div>
@@ -95,6 +105,13 @@ export default function Navbar() {
 
           {/* Mobile Nav Button */}
           <div className="md:hidden flex h-full justify-center items-center">
+            <Button
+              variant={"ghost"}
+              className="hover:bg-green-700 text-white hover:text-white cursor-pointer"
+              onClick={() => setShowSearch((prev) => !prev)}
+            >
+              <Search />
+            </Button>
             <Sheet>
               <SheetTrigger asChild>
                 <Button
@@ -160,7 +177,7 @@ export default function Navbar() {
             </Sheet>
           </div>
         </nav>
-        <SearchBar />
+        {showSearch && <SearchBar onSearch={setQuery} />}
       </>
     );
   }
@@ -194,7 +211,13 @@ export default function Navbar() {
         {/* Desktop Login Menu */}
         <div className="hidden md:flex justify-center items-center gap-4 w-[15vw]">
           <div className="flex justify-center items-center gap-2">
-            <Heart className="cursor-pointer"></Heart>
+            <Button
+              variant={"ghost"}
+              className="hover:bg-green-700 text-white hover:text-white cursor-pointer"
+              onClick={() => setShowSearch((prev) => !prev)}
+            >
+              <Search />
+            </Button>
             <ShoppingCart className="cursor-pointer"></ShoppingCart>
           </div>
           <div>
@@ -211,6 +234,13 @@ export default function Navbar() {
 
         {/* Mobile Nav Button */}
         <div className="md:hidden flex justify-center items-center">
+          <Button
+            variant={"ghost"}
+            className="hover:bg-green-700 text-white hover:text-white cursor-pointer"
+            onClick={() => setShowSearch((prev) => !prev)}
+          >
+            <Search />
+          </Button>
           <Sheet>
             <SheetTrigger asChild>
               <Button
@@ -272,7 +302,7 @@ export default function Navbar() {
           </Sheet>
         </div>
       </nav>
-      <SearchBar />
+      {showSearch && <SearchBar onSearch={setQuery} />}
     </>
   );
 }
