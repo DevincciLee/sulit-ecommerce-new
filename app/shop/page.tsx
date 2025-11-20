@@ -420,12 +420,12 @@ export default function Shop() {
 
   if (!user) {
     return (
-      <div className="container bg-white text-black flex flex-col items-center justify-center gap-4 mt-4">
+      <div className="mx-auto container bg-white text-black flex flex-col items-center justify-center gap-4 mt-4">
         <Label>
           Sorry, it seems like you're not logged in. Please login using the link
           below.
         </Label>
-        <Link href="/login">
+        <Link href="/authentication">
           <Button variant="default">Log in</Button>
         </Link>
       </div>
