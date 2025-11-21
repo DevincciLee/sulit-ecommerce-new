@@ -24,7 +24,7 @@ export function useAdmin() {
         .single();
 
       if (adminError) {
-        console.error("Error fetching admin creds", adminError);
+        console.error("Error fetching admin creds");
       }
 
       setAdminCreds(adminData?.isadmin ?? false);

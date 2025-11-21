@@ -86,7 +86,12 @@ export default function Navbar() {
           {/* Logo And Title */}
           <div className="flex justify-center items-center gap-4 md:w-[15vw]">
             <div>
-              <Image src={logo} alt="logo" className="w-10"></Image>
+              <Image
+                src={logo}
+                alt="logo"
+                className="w-10"
+                loading="eager"
+              ></Image>
             </div>
             <div>
               <Link href={"/"}>
@@ -209,7 +214,12 @@ export default function Navbar() {
         {/* Logo And Title */}
         <div className="flex justify-center items-center gap-4 md:w-[15vw]">
           <div>
-            <Image src={logo} alt="logo" className="w-10"></Image>
+            <Image
+              src={logo}
+              alt="logo"
+              className="w-10"
+              loading="eager"
+            ></Image>
           </div>
           <div>
             <Link href={"/"}>

@@ -20,7 +20,7 @@ export default function UserButton() {
       <Popover>
         <PopoverTrigger className="cursor-pointer">
           <Avatar>
-            <AvatarImage src={""} alt="avatar" className="" />
+            <AvatarImage src={""} alt="avatar" className="" loading="eager" />
             <AvatarFallback className="bg-black">CN</AvatarFallback>
           </Avatar>
         </PopoverTrigger>
