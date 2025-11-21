@@ -18,7 +18,6 @@ export function useAdmin() {
 
       const id = sessionData?.session?.user?.id ?? null;
       setUserId(id);
-      console.log(id);
 
       const { data: adminData, error: adminError } = await supabase
         .from("profiles")

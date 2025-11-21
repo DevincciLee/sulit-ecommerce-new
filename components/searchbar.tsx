@@ -28,13 +28,6 @@ export default function SearchBar({
           className="bg-white md:w-[35vw] w-[80vw]"
           placeholder="Search products..."
         />
-        <Button
-          variant={"ghost"}
-          className="hover:bg-green-500 cursor-pointer"
-          onClick={handleSearch}
-        >
-          <Search className="text-white size-6" />
-        </Button>
       </div>
     </div>
   );

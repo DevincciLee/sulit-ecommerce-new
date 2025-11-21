@@ -2,8 +2,17 @@
 import { useEffect, useState } from "react";
 import ProductCard from "./card";
 import { createClient } from "@/utils/supabase/client";
+import { useSearch } from "./context/searchContext";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "./ui/pagination";
 
-const MAX_ITEMS = 6;
+const pageSize = 6;
 
 type Product = {
   id: string;
@@ -19,15 +28,24 @@ type Product = {
 const ProductCard1 = () => {
   const supabase = createClient();
   const [products, setProducts] = useState<Product[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const { query = "" } = useSearch();
+  const filtered =
+    query.trim() === ""
+      ? products
+      : products.filter((p) =>
+          p.name.toLowerCase().includes(query.toLowerCase())
+        );
+  const totalPages = Math.ceil(filtered.length / pageSize);
+  const startIndex = (currentPage - 1) * pageSize;
+  const currentProducts = filtered.slice(startIndex, startIndex + pageSize);
 
   useEffect(() => {
     const fetchProducts = async () => {
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .eq("badge", "Featured")
-        .limit(MAX_ITEMS);
-
+        .eq("badge", "Featured");
       if (error) {
         console.error("Error fetching products:", error);
         return;
@@ -74,6 +92,46 @@ const ProductCard1 = () => {
           ))
         )}
       </div>
+
+      {/* Pagination */}
+      <Pagination className="mt-6">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (currentPage > 1) setCurrentPage(currentPage - 1);
+              }}
+            />
+          </PaginationItem>
+
+          {Array.from({ length: totalPages }, (_, i) => (
+            <PaginationItem key={i}>
+              <PaginationLink
+                href="#"
+                isActive={currentPage === i + 1}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentPage(i + 1);
+                }}
+              >
+                {i + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+
+          <PaginationItem>
+            <PaginationNext
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+              }}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </section>
   );
 };

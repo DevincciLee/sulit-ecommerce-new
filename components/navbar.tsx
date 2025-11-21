@@ -18,11 +18,44 @@ import useAuth from "@/hook/useAuth";
 import { redirect, useRouter } from "next/navigation";
 import client from "@/api/client";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearch } from "./context/searchContext";
+import UserButton from "./userButton";
+import { createClient } from "@/utils/supabase/client";
 
 export default function Navbar() {
+  type userInfo = {
+    id: string | null;
+    full_name: string | null;
+    email: string | null;
+  };
+
+  const supabase = createClient();
   const { setQuery } = useSearch();
+  const [username, setUsername] = useState<userInfo | null>(null);
+  const { user } = useAuth();
+  const router = useRouter();
+  const [showSearch, setShowSearch] = useState(false);
+
+  useEffect(() => {
+    const getUserName = async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id, full_name, email")
+        .eq("id", user?.id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching profiles:", error);
+        return;
+      }
+
+      setUsername(data);
+    };
+
+    getUserName();
+  }, [supabase, user]);
+
   const navLinks = [
     {
       id: 1,
@@ -41,9 +74,6 @@ export default function Navbar() {
     },
   ];
 
-  const { user } = useAuth();
-  const router = useRouter();
-  const [showSearch, setShowSearch] = useState(false);
   if (user) {
     return (
       <>
@@ -88,18 +118,7 @@ export default function Navbar() {
               <ShoppingCart className="cursor-pointer"></ShoppingCart>
             </div>
             <div>
-              <Button
-                variant={"default"}
-                onClick={() => {
-                  setTimeout(() => {
-                    toast.info("Signing out... Please wait");
-                    redirect("/authentication");
-                  }, 2000);
-                  client.auth.signOut();
-                }}
-              >
-                Logout
-              </Button>
+              <UserButton />
             </div>
           </div>
 
@@ -121,7 +140,7 @@ export default function Navbar() {
                   <Menu className="size-5"></Menu>
                 </Button>
               </SheetTrigger>
-              <SheetContent className="h-screen">
+              <SheetContent className="h-full">
                 <SheetTitle className="w-full flex pt-7 items-center z-50">
                   <Label className="text-xl uppercase font-bold pl-4">
                     sulit-tech
@@ -159,19 +178,16 @@ export default function Navbar() {
                     </div>
                   </div>
                 </div>
-                <SheetFooter>
-                  <Button
-                    variant={"outline"}
-                    onClick={() => {
-                      setTimeout(() => {
-                        toast.info("Signing out... Please wait");
-                        redirect("/authentication");
-                      }, 2000);
-                      client.auth.signOut();
-                    }}
-                  >
-                    Logout
-                  </Button>
+                <SheetFooter className="flex flex-row">
+                  <UserButton />
+                  {username && (
+                    <div key={username.id} className="flex flex-col gap-2">
+                      <Label>{username.full_name}</Label>
+                      <Label className="text-gray-400 overflox-x-hidden">
+                        {username.email}
+                      </Label>
+                    </div>
+                  )}
                 </SheetFooter>
               </SheetContent>
             </Sheet>
@@ -250,7 +266,7 @@ export default function Navbar() {
                 <Menu className="size-5"></Menu>
               </Button>
             </SheetTrigger>
-            <SheetContent className="h-screen">
+            <SheetContent className="h-full">
               <SheetTitle className="w-full flex pt-7 items-center z-50">
                 <Label className="text-xl uppercase font-bold pl-4">
                   sulit-tech

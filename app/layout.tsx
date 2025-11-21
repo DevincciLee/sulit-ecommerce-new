@@ -22,7 +22,6 @@ export default function RootLayout({
       <html lang="en">
         <head>
           <title>SULIT-TECH</title>
-          <link rel="icon" href="/logo.png" type="image/png" />
         </head>
         <body className={`antialiased`}>
           <AuthProvider>
@@ -40,7 +39,6 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <title>SULIT-TECH</title>
-        <link rel="icon" href="/logo.png" type="image/png" />
       </head>
       <body className={`antialiased`}>
         <AuthProvider>

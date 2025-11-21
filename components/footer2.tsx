@@ -30,8 +30,7 @@ const Footer2 = ({
     {
       title: "Social",
       links: [
-        { text: "Twitter", url: "#" },
-        { text: "Instagram", url: "#" },
+        { text: "Facebook", url: "https://www.facebook.com/sulittechofficial" },
       ],
     },
   ],
