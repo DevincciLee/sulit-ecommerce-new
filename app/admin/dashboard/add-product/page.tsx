@@ -4,18 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAdmin } from "@/hook/isAdmin";
-import { createClient } from "@/utils/supabase/client";
+import { client } from "@/api/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function AddProduct() {
   const { adminCreds } = useAdmin();
   const router = useRouter();
-  const supabase = createClient();
   const [image, setImage] = useState<string | null>(null);
   const [error, setError] = useState("");
   const functionToRun = async () => {
-    const { data: userData, error } = await supabase.auth.getUser();
+    const { data: userData, error } = await client.auth.getUser();
 
     console.log(userData.user?.role);
   };
@@ -46,7 +45,7 @@ export default function AddProduct() {
     // ✅ Upload image to Supabase Storage
     if (file) {
       const fileName = `${Date.now()}-${file.name}`;
-      const { data, error: uploadError } = await supabase.storage
+      const { data, error: uploadError } = await client.storage
         .from("product-images")
         .upload(fileName, file);
 
@@ -56,14 +55,14 @@ export default function AddProduct() {
         return;
       }
 
-      const { data: publicUrlData } = supabase.storage
+      const { data: publicUrlData } = client.storage
         .from("product-images")
         .getPublicUrl(fileName);
 
       imageUrl = publicUrlData.publicUrl;
     }
 
-    const { error: insertError } = await supabase.from("products").insert([
+    const { error: insertError } = await client.from("products").insert([
       {
         name,
         image: imageUrl,
@@ -149,13 +148,12 @@ export default function AddProduct() {
               <Input
                 type="number"
                 min="0"
-                step="0.01" // ✅ allows decimals
+                step="0.01"
                 name="product-price"
                 id="product-price"
                 className="md:w-[30vw] w-[60vw]"
                 required
                 onKeyDown={(e) => {
-                  // Allow control keys (Backspace, Tab, Arrow keys, Delete, Enter, Decimal point)
                   const allowedKeys = [
                     "Backspace",
                     "Tab",
@@ -165,8 +163,6 @@ export default function AddProduct() {
                     "Enter",
                     ".",
                   ];
-
-                  // If the key is not a digit, not a decimal point, and not in allowedKeys → block it
                   if (!/^[0-9.]$/.test(e.key) && !allowedKeys.includes(e.key)) {
                     e.preventDefault();
                     setError(
@@ -193,13 +189,12 @@ export default function AddProduct() {
               <Input
                 type="number"
                 min="0"
-                step="0.01" // ✅ allows decimals
+                step="0.01"
                 name="product-original-price"
                 id="product-original-price"
                 className="md:w-[30vw] w-[60vw]"
                 required
                 onKeyDown={(e) => {
-                  // Allow control keys (Backspace, Tab, Arrow keys, Delete, Enter, Decimal point)
                   const allowedKeys = [
                     "Backspace",
                     "Tab",
@@ -210,7 +205,6 @@ export default function AddProduct() {
                     ".",
                   ];
 
-                  // If the key is not a digit, not a decimal point, and not in allowedKeys → block it
                   if (!/^[0-9.]$/.test(e.key) && !allowedKeys.includes(e.key)) {
                     e.preventDefault();
                     setError(

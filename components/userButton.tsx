@@ -1,6 +1,4 @@
 "use client";
-
-import logo from "@/public/logo.png";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Popover,
@@ -10,11 +8,10 @@ import {
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
-import client from "@/api/client";
+import { client } from "@/api/client";
 import { redirect } from "next/navigation";
 import { Label } from "./ui/label";
 import useAuth from "@/hook/useAuth";
-import { Field } from "./ui/field";
 
 export default function UserButton() {
   const user = useAuth();

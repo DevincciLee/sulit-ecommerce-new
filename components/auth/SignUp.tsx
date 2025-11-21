@@ -1,6 +1,6 @@
 "use client";
 
-import client from "@/api/client";
+import { client } from "@/api/client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import useAuth from "@/hook/useAuth";
-import { createClient } from "@/utils/supabase/client";
 import { redirect } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
@@ -27,7 +26,6 @@ type Emails = {
 };
 
 export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
-  const supabase = createClient();
   const [emails, setEmails] = useState<Emails[]>([]);
   const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -48,8 +46,9 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       return;
     }
 
-    const { data: emailsFetchData, error: emailsFetchError } =
-      await supabase.rpc("get_all_user_emails");
+    const { data: emailsFetchData, error: emailsFetchError } = await client.rpc(
+      "get_all_user_emails"
+    );
 
     if (emailsFetchError) {
       console.error("Error fetching emails:", emailsFetchError.message);

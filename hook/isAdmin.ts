@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import client from "@/api/client";
-import { createClient } from "@/utils/supabase/client";
+import { client } from "@/api/client";
 
 export function useAdmin() {
-  const supabase = createClient();
   const [userId, setUserId] = useState<string | null>(null);
   const [adminCreds, setAdminCreds] = useState(false);
 
@@ -19,7 +17,7 @@ export function useAdmin() {
       const id = sessionData?.session?.user?.id ?? null;
       setUserId(id);
 
-      const { data: adminData, error: adminError } = await supabase
+      const { data: adminData, error: adminError } = await client
         .from("profiles")
         .select("isadmin")
         .eq("id", id)

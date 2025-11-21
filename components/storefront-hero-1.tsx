@@ -5,7 +5,7 @@ import { ShoppingBag, Star, ArrowRight, Badge } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import ProductCard from "./card";
-import { createClient } from "@/utils/supabase/client";
+import { client } from "@/api/client";
 import { useEffect, useState } from "react";
 
 const StorefrontHero1 = () => {
@@ -21,12 +21,11 @@ const StorefrontHero1 = () => {
   };
 
   const MAX_ITEMS = 2;
-  const supabase = createClient();
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const { data, error } = await supabase
+      const { data, error } = await client
         .from("products")
         .select("*")
         .eq("badge", "Bestseller")
@@ -37,22 +36,33 @@ const StorefrontHero1 = () => {
         return;
       }
 
-      const mapped = data.map((p) => ({
-        id: p.id,
-        name: p.name,
-        description: p.description ?? "",
-        slug: p.slug,
-        imageUrl: p.image,
-        price: p.price,
-        originalPrice: p.original_price,
-        badge: p.badge,
-      }));
+      const mapped = data.map(
+        (p: {
+          id: any;
+          name: any;
+          description: any;
+          slug: any;
+          image: any;
+          price: any;
+          original_price: any;
+          badge: any;
+        }) => ({
+          id: p.id,
+          name: p.name,
+          description: p.description ?? "",
+          slug: p.slug,
+          imageUrl: p.image,
+          price: p.price,
+          originalPrice: p.original_price,
+          badge: p.badge,
+        })
+      );
 
       setProducts(mapped);
     };
 
     fetchProducts();
-  }, [supabase]);
+  }, [client]);
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl shadow-md mt-4 md:w-full w-[90vw]">

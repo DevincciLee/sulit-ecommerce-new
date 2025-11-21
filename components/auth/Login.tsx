@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import client from "@/api/client";
+import { client } from "@/api/client";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 import { FormEvent } from "react";

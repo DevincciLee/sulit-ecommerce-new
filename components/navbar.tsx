@@ -15,22 +15,17 @@ import SearchBar from "./searchbar";
 import logo from "@/public/logo.png";
 import Image from "next/image";
 import useAuth from "@/hook/useAuth";
-import { redirect, useRouter } from "next/navigation";
-import client from "@/api/client";
-import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSearch } from "./context/searchContext";
 import UserButton from "./userButton";
-import { createClient } from "@/utils/supabase/client";
-
+import { client } from "@/api/client";
 export default function Navbar() {
   type userInfo = {
     id: string | null;
     full_name: string | null;
     email: string | null;
   };
-
-  const supabase = createClient();
   const { setQuery } = useSearch();
   const [username, setUsername] = useState<userInfo | null>(null);
   const { user } = useAuth();
@@ -44,7 +39,7 @@ export default function Navbar() {
         return;
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await client
         .from("profiles")
         .select("id, full_name, email")
         .eq("id", user.id) // guaranteed to be defined here
@@ -64,7 +59,7 @@ export default function Navbar() {
     };
 
     getUserName();
-  }, [supabase, user]);
+  }, [client, user]);
 
   const navLinks = [
     {

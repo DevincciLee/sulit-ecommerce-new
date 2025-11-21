@@ -14,7 +14,7 @@ import {
   PaginationNext,
 } from "@/components/ui/pagination";
 import { useSearch } from "@/components/context/searchContext";
-import { createClient } from "@/utils/supabase/client";
+import { client } from "@/api/client";
 
 type Product = {
   id: string;
@@ -28,7 +28,6 @@ type Product = {
 
 export default function Shop() {
   const { user } = useAuth();
-  const supabase = createClient();
 
   const [products, setProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,7 +37,7 @@ export default function Shop() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const { data, error } = await supabase.from("products").select(`
+      const { data, error } = await client.from("products").select(`
           *
         `);
 
@@ -61,7 +60,7 @@ export default function Shop() {
     };
 
     fetchProducts();
-  }, [supabase]);
+  }, [client]);
 
   const filtered =
     query.trim() === ""

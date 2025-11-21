@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import ProductCard from "./card";
-import { createClient } from "@/utils/supabase/client";
 import { useSearch } from "./context/searchContext";
 import {
   Pagination,
@@ -11,6 +10,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "./ui/pagination";
+import { client } from "@/api/client";
 
 const pageSize = 6;
 
@@ -26,7 +26,6 @@ type Product = {
 };
 
 const ProductCard1 = () => {
-  const supabase = createClient();
   const [products, setProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const { query = "" } = useSearch();
@@ -42,7 +41,7 @@ const ProductCard1 = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const { data, error } = await supabase
+      const { data, error } = await client
         .from("products")
         .select("*")
         .eq("badge", "Featured");
@@ -66,7 +65,7 @@ const ProductCard1 = () => {
     };
 
     fetchProducts();
-  }, [supabase]);
+  }, [client]);
 
   return (
     <section className="w-full px-8 py-6">

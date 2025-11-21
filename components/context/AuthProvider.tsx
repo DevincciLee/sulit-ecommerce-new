@@ -7,11 +7,11 @@ import {
   ReactNode,
   useContext,
 } from "react";
-import client from "@/api/client";
+import { client } from "@/api/client";
 import { User } from "@supabase/supabase-js";
 
 type AuthContextType = {
-  user: User | null; // replace `any` with your Supabase `User` type if available
+  user: User | null;
   loading: boolean;
 };
 
