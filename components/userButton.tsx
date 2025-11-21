@@ -14,6 +14,7 @@ import client from "@/api/client";
 import { redirect } from "next/navigation";
 import { Label } from "./ui/label";
 import useAuth from "@/hook/useAuth";
+import { Field } from "./ui/field";
 
 export default function UserButton() {
   const user = useAuth();
@@ -30,11 +31,11 @@ export default function UserButton() {
           <Label className="w-full flex justify-center items-center">
             Hi! {user.user?.email}
           </Label>
-          <Button variant={"ghost"} className="w-full cursor-pointer">
+          <Button variant={"outline"} className="w-full cursor-pointer">
             <Link href={"/profile"}>Edit Profile</Link>
           </Button>
           <Button
-            className="w-full"
+            className="w-full cursor-pointer"
             variant={"default"}
             onClick={() => {
               setTimeout(() => {

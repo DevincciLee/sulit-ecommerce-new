@@ -44,15 +44,16 @@ export function LoginForm({
       password,
     });
 
+    if (error) {
+      toast.error("Unable to sign in, please try again.");
+      return;
+    }
+
     if (data) {
       toast.success("Success! Redirecting to homepage...");
       setTimeout(() => {
         redirect("/");
       }, 3000);
-    }
-
-    if (error) {
-      toast.error("Unable to sign in, please try again.");
     }
   };
   return (

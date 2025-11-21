@@ -16,10 +16,19 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import useAuth from "@/hook/useAuth";
+import { createClient } from "@/utils/supabase/client";
 import { redirect } from "next/navigation";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { toast } from "sonner";
+
+type Emails = {
+  email: string;
+};
+
 export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
+  const supabase = createClient();
+  const [emails, setEmails] = useState<Emails[]>([]);
   const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -39,6 +48,31 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       return;
     }
 
+    const { data: emailsFetchData, error: emailsFetchError } =
+      await supabase.rpc("get_all_user_emails");
+
+    if (emailsFetchError) {
+      console.error("Error fetching emails:", emailsFetchError.message);
+      toast.error("Unable to check existing users.");
+      return;
+    }
+
+    // Map RPC result into array of { email }
+    const mapEmails = emailsFetchData.map((em: { email: string }) => ({
+      email: em.email,
+    }));
+    setEmails(mapEmails);
+
+    // Check if entered email already exists
+    const emailExists = mapEmails.some(
+      (em: { email: string }) => em.email === email
+    );
+
+    if (emailExists) {
+      toast.error("This email is already registered. Please log in instead.");
+      return;
+    }
+
     const { data, error } = await client.auth.signUp({
       email,
       password,
@@ -49,16 +83,33 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       },
     });
 
-    if (data) {
+    if (error) {
+      toast.error(error.message || "Unable to sign up, please try again.");
+      return;
+    }
+
+    toast.success("Success! Please check your email for verification!");
+    setTimeout(() => {
+      redirect("/");
+    }, 3000);
+
+    /* if (error) {
+      if (error.message.includes("already registered")) {
+        toast.error("This email is already registered. Please log in instead.");
+      } else {
+        toast.error(error.message || "Unable to sign up, please try again.");
+      }
+      return;
+    }*/
+
+    /* if (!data) {
+      toast.error("Unable to sign up, please try again.");
+    } else {
       toast.success("Success! Please check your email for verification!");
       setTimeout(() => {
         redirect("/");
       }, 3000);
-    }
-
-    if (error) {
-      toast.error("Unable to sign up, please try again.");
-    }
+    }*/
   };
 
   return (

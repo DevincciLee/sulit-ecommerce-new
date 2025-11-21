@@ -39,14 +39,24 @@ export default function Navbar() {
 
   useEffect(() => {
     const getUserName = async () => {
+      if (!user?.id) {
+        console.warn("User ID is not available yet");
+        return;
+      }
+
       const { data, error } = await supabase
         .from("profiles")
         .select("id, full_name, email")
-        .eq("id", user?.id)
+        .eq("id", user.id) // guaranteed to be defined here
         .single();
 
       if (error) {
-        console.error("Error fetching profiles:", error);
+        console.error("Error fetching profiles:", error.message);
+        return;
+      }
+
+      if (!data) {
+        console.warn("No profile found for user:", user.id);
         return;
       }
 
