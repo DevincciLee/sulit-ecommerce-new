@@ -13,11 +13,6 @@ export default function AddProduct() {
   const router = useRouter();
   const [image, setImage] = useState<string | null>(null);
   const [error, setError] = useState("");
-  const functionToRun = async () => {
-    const { data: userData, error } = await client.auth.getUser();
-
-    console.log(userData.user?.role);
-  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -81,8 +76,6 @@ export default function AddProduct() {
       alert("Product added successfully!");
       setImage(null);
     }
-
-    functionToRun();
   };
 
   if (!adminCreds) {
