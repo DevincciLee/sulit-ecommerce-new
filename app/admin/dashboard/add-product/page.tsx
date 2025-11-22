@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAdmin } from "@/hook/isAdmin";
 import { client } from "@/api/client";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function AddProduct() {
@@ -75,6 +75,7 @@ export default function AddProduct() {
       setError("");
       alert("Product added successfully!");
       setImage(null);
+      redirect("/admin/dashboard/product-list");
     }
   };
 
