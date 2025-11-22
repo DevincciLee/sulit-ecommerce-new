@@ -105,15 +105,7 @@ export default function EditProduct() {
       toast.error("Failed to update product");
     } else {
       toast.success("Product updated successfully!");
-      // ✅ re-fetch product so UI updates immediately
-      setProduct({
-        ...product,
-        name,
-        price,
-        original_price: originalPrice,
-        badge,
-        image: imageUrl,
-      });
+      redirect("/admin/dashboard/product-list");
     }
   };
 
