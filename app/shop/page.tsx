@@ -49,7 +49,7 @@ export default function Shop() {
       const mapped = data.map((p) => ({
         id: p.id,
         name: p.name,
-        imageUrl: p.image,
+        imageUrl: p.thumbnail,
         slug: p.slug,
         price: p.price,
         originalPrice: p.original_price,

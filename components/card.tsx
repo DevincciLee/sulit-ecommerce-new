@@ -51,7 +51,7 @@ export default function ProductCard({
 
   return (
     <article
-      className="group relative flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:shadow-md focus-within:ring-2 focus-within:ring-indigo-500"
+      className="group relative flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:shadow-md focus-within:ring-2 focus-within:ring-green-500"
       aria-labelledby={`product-${id}-title`}
     >
       {/* Image */}
@@ -121,7 +121,7 @@ export default function ProductCard({
           </button>
           <a
             href={`/shop/product/${slug}`}
-            className="flex justify-center items-center rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-800 transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="flex justify-center items-center rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-800 transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500"
             aria-label={`View details for ${name}`}
           >
             Details

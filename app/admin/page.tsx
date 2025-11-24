@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useAdmin } from "@/hook/isAdmin";
-import useAuth from "@/hook/useAuth";
 import { redirect, useRouter } from "next/navigation";
 
 export default function AdminPage() {
@@ -24,7 +23,7 @@ export default function AdminPage() {
     );
   } else {
     setTimeout(() => {
-      redirect("/admin/dashboard");
+      redirect("/admin/dashboard/product-list");
     }, 3000);
     return (
       <div className="mx-auto container flex justify-center items-center mt-4">

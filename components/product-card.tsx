@@ -55,7 +55,7 @@ const ProductCard1 = () => {
         name: p.name,
         description: p.description ?? "",
         slug: p.slug ?? "",
-        imageUrl: p.image,
+        imageUrl: p.thumbnail,
         price: p.price,
         originalPrice: p.original_price,
         badge: p.badge,

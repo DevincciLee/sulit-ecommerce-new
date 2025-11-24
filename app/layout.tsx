@@ -15,25 +15,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { adminCreds } = useAdmin();
   const pathname = usePathname();
-  if (pathname.startsWith("/admin") && adminCreds) {
-    return (
-      <html lang="en">
-        <head>
-          <title>SULIT-TECH</title>
-        </head>
-        <body className={`antialiased`}>
-          <AuthProvider>
-            <main className="flex flex-row">
-              <Sidebar />
-              {children}
-            </main>
-          </AuthProvider>
-          <Toaster />
-        </body>
-      </html>
-    );
+  if (pathname.startsWith("/admin")) {
+    const { adminCreds } = useAdmin();
+    if (adminCreds) {
+      return (
+        <html lang="en">
+          <head>
+            <title>SULIT-TECH</title>
+          </head>
+          <body className={`antialiased`}>
+            <AuthProvider>
+              <main className="flex flex-row">
+                <Sidebar />
+                {children}
+              </main>
+            </AuthProvider>
+            <Toaster />
+          </body>
+        </html>
+      );
+    }
   }
   return (
     <html lang="en">

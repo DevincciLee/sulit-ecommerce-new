@@ -14,7 +14,7 @@ type Product = {
   id: string;
   name: string;
   slug: string;
-  image: string;
+  thumbnail: string;
   price: number;
   original_price: number;
   badge: string;
@@ -56,7 +56,7 @@ export default function EditProduct() {
 
     if (!product) return;
 
-    let imageUrl = product.image;
+    let imageUrl = product.thumbnail;
     const path = imageUrl?.split("product-images/")[1];
 
     const { data: imageOldData, error: imageOldError } = await client.storage
@@ -96,7 +96,7 @@ export default function EditProduct() {
         slug: slugData,
         original_price: originalPrice,
         badge,
-        image: imageUrl, // ✅ use URL, not File
+        thumbnail: imageUrl, // ✅ use URL, not File
       })
       .eq("id", productId)
       .single();
@@ -110,7 +110,7 @@ export default function EditProduct() {
   };
 
   const handleDelete = async () => {
-    let imageUrl = product?.image;
+    let imageUrl = product?.thumbnail;
     const path = imageUrl?.split("product-images/")[1];
 
     if (path) {
@@ -175,6 +175,33 @@ export default function EditProduct() {
               type="file"
               accept="image/*"
               name="image-input"
+              id="image-input"
+            />
+          </div>
+          <div>
+            <Label>Supporting Image 1</Label>
+            <Input
+              type="file"
+              accept="image/*"
+              name="image-input1"
+              id="image-input"
+            />
+          </div>
+          <div>
+            <Label>Supporting Image 2</Label>
+            <Input
+              type="file"
+              accept="image/*"
+              name="image-input2"
+              id="image-input"
+            />
+          </div>
+          <div>
+            <Label>Supporting Image 3</Label>
+            <Input
+              type="file"
+              accept="image/*"
+              name="image-input3"
               id="image-input"
             />
           </div>

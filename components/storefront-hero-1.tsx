@@ -42,7 +42,7 @@ const StorefrontHero1 = () => {
           name: any;
           description: any;
           slug: any;
-          image: any;
+          thumbnail: any;
           price: any;
           original_price: any;
           badge: any;
@@ -51,7 +51,7 @@ const StorefrontHero1 = () => {
           name: p.name,
           description: p.description ?? "",
           slug: p.slug,
-          imageUrl: p.image,
+          imageUrl: p.thumbnail,
           price: p.price,
           originalPrice: p.original_price,
           badge: p.badge,
