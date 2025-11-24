@@ -19,6 +19,7 @@ type Product = {
   original_price: number;
   badge: string;
   supporting_images: string[];
+  description?: string;
 };
 
 export default function ProductSlug() {
@@ -26,6 +27,9 @@ export default function ProductSlug() {
   const params = useParams();
   const slug = params.slug as string;
   const [product, setProduct] = useState<Product | null>(null);
+
+  // 👇 Track which image is currently selected
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -41,6 +45,7 @@ export default function ProductSlug() {
       }
 
       setProduct(data);
+      setSelectedImage(data?.thumbnail ?? null);
     };
 
     fetchProduct();
@@ -79,14 +84,16 @@ export default function ProductSlug() {
   return (
     <div className="mx-auto container w-full h-full p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Thumbnail */}
+        {/* Main Image */}
         <div className="relative w-full h-[400px] border rounded-lg overflow-hidden">
-          <Image
-            src={product.thumbnail}
-            alt={product.name}
-            fill
-            className="object-cover"
-          />
+          {selectedImage && (
+            <Image
+              src={selectedImage}
+              alt={product.name}
+              fill
+              className="object-cover"
+            />
+          )}
           {product.badge && (
             <span className="absolute top-2 left-2 bg-green-600 text-white text-xs px-2 py-1 rounded">
               {product.badge}
@@ -97,6 +104,9 @@ export default function ProductSlug() {
         {/* Product Info */}
         <div className="flex flex-col gap-4">
           <h1 className="text-2xl font-bold">{product.name}</h1>
+          {product.description && (
+            <p className="text-gray-600">{product.description}</p>
+          )}
 
           {/* Price */}
           <div className="flex items-center gap-3">
@@ -119,20 +129,28 @@ export default function ProductSlug() {
           {product.supporting_images?.length > 0 && (
             <div>
               <Label className="font-semibold">More Images</Label>
-              <div className="flex gap-2 mt-2">
-                {product.supporting_images.map((img, idx) => (
-                  <div
-                    key={idx}
-                    className="relative w-24 h-24 border rounded overflow-hidden"
-                  >
-                    <Image
-                      src={img}
-                      alt={`${product.name} supporting image ${idx + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
+              <div className="flex gap-2 mt-2 flex-wrap">
+                {[product.thumbnail, ...product.supporting_images].map(
+                  (img, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setSelectedImage(img)}
+                      className={`relative w-20 h-20 border rounded overflow-hidden focus:outline-none ${
+                        selectedImage === img
+                          ? "ring-2 ring-green-500"
+                          : "hover:border-green-400"
+                      }`}
+                    >
+                      <Image
+                        src={img}
+                        alt={`${product.name} image ${idx + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </button>
+                  )
+                )}
               </div>
             </div>
           )}
